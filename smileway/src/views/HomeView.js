@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import UserCarrusel from './../components/UserCarrusel';
+import TipsCarrusel from './../components/TipsCarrusel';
 import UniversitiesCarrusel from './../components/UniversitiesCarrusel';
 import {
   StyleSheet,
@@ -27,9 +28,10 @@ export default class HomeView extends Component{
       <View style={styles.root}>
         <ScrollView contentContainerStyle={styles.scroll}>
           <View style={styles.carrusel}>
-            <UniversitiesCarrusel/>
+            <TipsCarrusel/>
           </View>
           <UserCarrusel/>
+          <UniversitiesCarrusel/>
         </ScrollView>
       </View>
     );
