@@ -141,6 +141,17 @@ export default class TipsCarrusel extends Component {
           dotsLength={this.listaItemMenu.length}
           activeDotIndex={activeSlide}
           carouselRef={this._slider1Ref}
+          containerStyle={{ 
+            backgroundColor: '#2796bf',
+            width: '100%'
+          }}
+          dotStyle={{
+              width: 8,
+              height: 8,
+              backgroundColor: '#FFF',
+              borderRadius: 10
+          }}
+          dotColor={'#FFF'}
         />
     );
   }

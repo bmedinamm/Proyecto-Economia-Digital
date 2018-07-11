@@ -44,11 +44,13 @@ export default class App extends Component<Props> {
               <Scene
                   title="Smileway"
                   key="homeView"
+                  titleStyle={styles.title}
                   component={HomeView}
+                  navTransparent={true}
                   icon={({ focused }) => (
                       <Icon
                           size={30}
-                          color={focused ? '#3BAFDA' : '#434A54'}
+                          color={focused ? '#1a84ab' : '#434A54'}
                           name={'md-home'}
                           text={'My Water'}
                           textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
@@ -72,7 +74,7 @@ export default class App extends Component<Props> {
                   icon={({ focused }) => (
                       <Icon
                           size={30}
-                          color={focused ? '#3BAFDA' : '#434A54'}
+                          color={focused ? '#1a84ab' : '#434A54'}
                           name={'md-calendar'}
                           text={'My Water'}
                           textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
@@ -86,7 +88,7 @@ export default class App extends Component<Props> {
                   icon={({ focused }) => (
                       <Icon
                           size={30}
-                          color={focused ? '#3BAFDA' : '#434A54'}
+                          color={focused ? '#1a84ab' : '#434A54'}
                           name={'md-heart'}
                           text={'My Water'}
                           textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
@@ -100,7 +102,7 @@ export default class App extends Component<Props> {
                   icon={({ focused }) => (
                       <Icon
                           size={30}
-                          color={focused ? '#3BAFDA' : '#434A54'}
+                          color={focused ? '#1a84ab' : '#434A54'}
                           name={'ios-contact'}
                           textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
                       />
@@ -118,7 +120,8 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   navBarIcon: {
     fontSize: 25,
-    marginRight: 15
+    marginRight: 15,
+    color: '#FFF'
   },
   navBarIcons: {
     flexDirection: 'row'
@@ -131,5 +134,8 @@ const styles = StyleSheet.create({
   },
   activeLabel: {
     color: '#3BAFDA'
+  },
+  title: {
+    color: '#FFF'
   }
 });
