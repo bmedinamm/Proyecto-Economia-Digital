@@ -5,7 +5,6 @@
  */
 
 import React, { Component } from 'react';
-
 import {
   StyleSheet,
   Text,
@@ -24,7 +23,6 @@ export default class ChatView extends Component{
   render() {
     return (
       <View>
-        <Text>Hola mundo</Text>
       </View>
     );
   }

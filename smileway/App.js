@@ -68,7 +68,7 @@ export default class App extends Component<Props> {
                   )}
               />
               <Scene
-                  title="Smileway"
+                  title="Agenda de citas"
                   key="agendaView"
                   component={AgendaView}
                   icon={({ focused }) => (
