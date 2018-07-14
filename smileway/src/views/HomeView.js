@@ -28,7 +28,7 @@ export default class HomeView extends Component{
     return (
       <View style={styles.root}>
         <View style={styles.layout}>
-          <StatusBar barStyle="light-content"/>
+          <StatusBar barStyle="dark-content"/>
           <ScrollView contentContainerStyle={styles.scroll}>
             <View style={styles.carrusel}>
               <TipsCarrusel/>

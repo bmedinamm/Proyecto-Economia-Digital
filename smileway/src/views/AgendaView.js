@@ -6,6 +6,8 @@
 
 import React, { Component } from 'react';
 import {Agenda} from 'react-native-calendars';
+import { LinearGradient } from 'expo';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   StyleSheet,
   Text,
@@ -46,7 +48,8 @@ export default class AgendaView extends Component{
          // monthFormat={'yyyy'}
          // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
         //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-      />
+      >
+      </Agenda>
     );
   }
 
@@ -62,7 +65,8 @@ export default class AgendaView extends Component{
             this.state.items[strTime].push({
               hour: '05:30 PM - 06:00 PM',
               name: 'Astrid Hanoy Salguero',
-              height: Math.max(70, Math.floor(Math.random() * 150))
+              type: 'Endodoncia',
+              height: 90
             });
           }
         }
@@ -79,13 +83,21 @@ export default class AgendaView extends Component{
 
   renderItem(item) {
     return (
-      <View style={[styles.item, {height: item.height}]}>
-        <View>
-          <Text style={styles.hour}>{item.hour}</Text>
-          <Text style={styles.name}>{item.name}</Text>
-        </View>
-        <Image style={styles.imagen} source={require('./../assets/img/woman.jpg')}/>
-      </View>
+      <TouchableOpacity>
+        <LinearGradient
+          colors={['#1abc9c', '#1abc9c', '#16a085']}
+          start={[0, 0.5]}
+          end={[1, 0.5]}
+          style={[styles.item, {height: item.height}]}>
+        >
+          <View style={styles.box}>
+            <Text style={styles.type}><Icon style={styles.icon} name="md-arrow-round-forward"></Icon> {item.type}</Text>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.hour}>{item.hour}</Text>
+          </View>
+          <Image style={styles.imagen} source={require('./../assets/img/woman.jpg')}/>
+        </LinearGradient>
+      </TouchableOpacity>
     );
   }
 
@@ -106,8 +118,13 @@ export default class AgendaView extends Component{
 }
 
 const styles = StyleSheet.create({
+  icon: {
+    fontSize: 20
+  },
+  box: {
+    flex: 1
+  },
   item: {
-    backgroundColor: '#1abc9c',
     flex: 1,
     borderRadius: 5,
     padding: 10,
@@ -121,18 +138,24 @@ const styles = StyleSheet.create({
     flex:1,
     paddingTop: 30
   },
+  type: {
+    fontSize: 18,
+    color: '#FFF',
+    marginLeft: 5
+  },
   name: {
     marginTop: 5,
     fontSize: 16,
     color: '#FFF'
   },
   hour: {
-    color: '#FFF'
+    color: '#FFF',
+    marginTop: 5
   },
   imagen: {
     height: 50,
     width: 50,
-    marginRight: 20,
-    borderRadius: '25%',
+    borderRadius: 25,
+    marginRight: 5
   }
 });

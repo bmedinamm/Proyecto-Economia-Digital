@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   imagen: {
     height: 40,
     width: 40,
-    borderRadius: '20%',
+    borderRadius: 20,
   },
   containerRoot:{
     width: 135,

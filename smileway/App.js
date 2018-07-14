@@ -71,6 +71,7 @@ export default class App extends Component<Props> {
                   title="Agenda de citas"
                   key="agendaView"
                   component={AgendaView}
+                  navTransparent={false}
                   icon={({ focused }) => (
                       <Icon
                           size={30}
@@ -118,6 +119,9 @@ export default class App extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
+  navigationBar: {
+    backgroundColor: '#1a84ab'
+  },
   navBarIcon: {
     fontSize: 25,
     marginRight: 15,
