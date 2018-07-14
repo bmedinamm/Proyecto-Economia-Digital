@@ -6,6 +6,8 @@
 
 import React, { Component } from 'react';
 import ItemUserCarrusel from './ItemUserCarrusel';
+import {Actions} from 'react-native-router-flux';
+
 import {
   StyleSheet,
   Text,
@@ -23,12 +25,18 @@ export default class UserCarrusel extends Component {
     super(props);
   }
 
+  abrirVistaOdontologos(){
+    Actions.odontologos({});
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.titulo}>Odontólogos universitarios</Text>
-          <Text style={styles.opcion}>Mostrar todos <Icon name="ios-arrow-forward"/></Text>
+          <TouchableOpacity onPress={this.abrirVistaOdontologos}>
+            <Text style={styles.opcion}>Mostrar todos <Icon name="ios-arrow-forward"/></Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.carrusel}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>

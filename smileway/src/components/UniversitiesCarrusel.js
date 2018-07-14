@@ -28,7 +28,9 @@ export default class UniversitiesCarrusel extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.titulo}>Instituciones universitarias</Text>
-          <Text style={styles.opcion}>Mostrar todas <Icon name="ios-arrow-forward"/></Text>
+          <TouchableOpacity>
+            <Text style={styles.opcion}>Mostrar todas <Icon name="ios-arrow-forward"/></Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.carrusel}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>

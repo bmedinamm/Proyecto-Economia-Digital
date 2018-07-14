@@ -1,0 +1,166 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+
+import React, { Component } from 'react';
+import {Router, Scene, Stack, Tabs, Actions} from 'react-native-router-flux';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity
+} from 'react-native';
+
+import Icon from 'react-native-vector-icons/Ionicons';
+import {connect} from 'react-redux';
+import HomeView from './views/HomeView';
+import AgendaView from './views/AgendaView';
+import PerfilView from './views/PerfilView';
+import NotificacionesView from './views/NotificacionesView';
+import MisCitasView from './views/MisCitasView';
+import InteresesView from './views/InteresesView';
+import MensajesView from './views/MensajesView';
+import OdontologosView from './views/OdontologosView';
+
+mapStateToProps = (state)=>{
+  //alert(JSON.stringify(state))
+  return{
+    prueba: state.mostraddrBarra
+  }
+}
+
+class Config extends Component {
+
+  constructor(props){
+    super(props);
+  }
+
+  render() {
+    return (
+      <Router>
+          <Stack key="root" >
+            <Tabs showLabel={false}>
+                <Scene
+                    title="Smileway"
+                    key="homeView"
+                    titleStyle={styles.title}
+                    component={HomeView}
+                    navTransparent={true}
+                    icon={({ focused }) => (
+                        <Icon
+                            size={30}
+                            color={focused ? '#1a84ab' : '#434A54'}
+                            name={'md-home'}
+                            text={'My Water'}
+                            textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
+                        />
+                    )}
+                    renderRightButton={() => (
+                      <View style={styles.navBarIcons}>
+                        <TouchableOpacity onPress={this.abrirVistaNotificaciones}>
+                          <Icon style={styles.navBarIcon} name="md-notifications"/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.abrirVistaMensajes}>
+                          <Icon style={styles.navBarIcon} name="ios-paper-plane"/>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                />
+                <Scene
+                    title="Agenda de citas"
+                    key="agendaView"
+                    component={AgendaView}
+                    navTransparent={false}
+                    icon={({ focused }) => (
+                        <Icon
+                            size={30}
+                            color={focused ? '#1a84ab' : '#434A54'}
+                            name={'md-calendar'}
+                            text={'My Water'}
+                            textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
+                        />
+                    )}
+                />
+                <Scene
+                    title="Smileway"
+                    key="interesesView"
+                    component={InteresesView}
+                    icon={({ focused }) => (
+                        <Icon
+                            size={30}
+                            color={focused ? '#1a84ab' : '#434A54'}
+                            name={'md-heart'}
+                            text={'My Water'}
+                            textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
+                        />
+                    )}
+                />
+                <Scene
+                    title="Smileway"
+                    key="perfilView"
+                    component={PerfilView}
+                    icon={({ focused }) => (
+                        <Icon
+                            size={30}
+                            color={focused ? '#1a84ab' : '#434A54'}
+                            name={'ios-contact'}
+                            textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
+                        />
+                    )}
+                />
+            </Tabs>
+            <Scene title="Notificaciones" key="notificaciones" component={NotificacionesView}/>
+            <Scene title="Mensajes" key="mensajes" component={MensajesView}/>
+            <Scene 
+              title="Explorar" 
+              key="odontologos" 
+              component={OdontologosView}
+
+              renderRightButton={() => (
+                <View style={styles.navBarIcons}>
+                  <TouchableOpacity onPress={this.props.prueba}>
+                    <Icon style={styles.searchIcon} name="ios-search"/>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </Stack>
+        </Router>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  searchIcon: {
+    fontSize: 25,
+    marginRight: 15,
+  },
+  navigationBar: {
+    backgroundColor: '#1a84ab'
+  },
+  navBarIcon: {
+    fontSize: 25,
+    marginRight: 15,
+    color: '#FFF'
+  },
+  navBarIcons: {
+    flexDirection: 'row'
+  },
+  tabs: {
+    backgroundColor: '#CCC'
+  },
+  label:{
+    color: '#CCC'
+  },
+  activeLabel: {
+    color: '#3BAFDA'
+  },
+  title: {
+    color: '#FFF'
+  }
+});
+
+export default connect(mapStateToProps)(Config);
