@@ -23,12 +23,12 @@ export default class ItemUserList extends Component {
 
   render() {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
         <View style={styles.containerRoot}>
           <View style={styles.container}>
-            <Image style={styles.imagen} source={require('./../assets/img/woman.jpg')}/>
-            <Text style={styles.text}>Astrid Hanoy</Text>
-            <Text style={styles.universidad}>3 servicios</Text>
+            <Image style={styles.imagen} source={{uri: this.props.user.imagen}}/>
+            <Text style={styles.text}>{this.props.user.nombreCorto}</Text>
+            <Text style={styles.universidad}>{this.props.user.cantidadServicios} servicios</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -49,12 +49,15 @@ const styles = StyleSheet.create({
     fontSize: 13.5,
     fontWeight: '500',
     color: '#606060',
-    marginTop: 5
+    marginTop: 5,
+    textAlign: 'center'
   },
   imagen: {
     height: 70,
     width: 70,
     borderRadius: 35,
+    borderColor: '#DDD', 
+    borderWidth: 1,
   },
   containerRoot:{
     width: 90,
@@ -63,6 +66,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginBottom: 10,
-    marginTop: 20
+    marginTop: 20,
   }
 });
