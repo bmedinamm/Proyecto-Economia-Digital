@@ -61,7 +61,8 @@ class SwiperInicio extends React.Component {
             onPress={()=>Actions.inicioSesionView()}>
             <Text style={styles.logIntext}>Inicia sesión</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.registerButton}>
+          <TouchableOpacity style={styles.registerButton}
+            onPress={()=>Actions.registrarseView()}>
             <Text style={styles.registerText}>Regístrate</Text>
           </TouchableOpacity>
           <View style={styles.lineaView}>

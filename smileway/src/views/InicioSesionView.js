@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo';
+import {Actions} from 'react-native-router-flux';
 
 //Variables de ancho y alto
 var { width, height } = Dimensions.get('window');
@@ -41,7 +42,8 @@ export default class InicioSesionView extends React.Component {
         <Icon.Button name="logo-facebook">
           <Text style={styles.whiteText}>Login with Facebook</Text>
         </Icon.Button>
-        <TouchableOpacity style={styles.footer}>
+        <TouchableOpacity style={styles.footer}
+          onPress={()=>Actions.registrarseView()}>
           <Text style={styles.whiteText}>¿Aún no tienes cuenta? </Text>
           <Text style={[styles.whiteText,styles.bold]}>Regístrate aquí.</Text>
         </TouchableOpacity>

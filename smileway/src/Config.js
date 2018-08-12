@@ -26,6 +26,7 @@ import MensajesView from './views/MensajesView';
 import OdontologosView from './views/OdontologosView';
 import InicioSesionView from './views/InicioSesionView';
 import SwiperInicialView from './views/SwiperInicialView';
+import RegistrarseView from './views/RegistrarseView';
 
 mapStateToProps = (state)=>{
   //alert(JSON.stringify(state))
@@ -44,7 +45,7 @@ class Config extends Component {
     return (
       <Router>
           <Stack key="root">
-            {/* <Scene
+            <Scene
               title='Swiper Inicial'
               key='swiperInicialView'
               hideNavBar={true}
@@ -55,7 +56,13 @@ class Config extends Component {
               key='inicioSesionView'
               hideNavBar={true}
               component={InicioSesionView}>
-            </Scene> */}
+            </Scene>
+            <Scene
+              title='Registro'
+              key='registrarseView'
+              hideNavBar={true}
+              component={RegistrarseView}>
+            </Scene>
             <Tabs showLabel={false} tabBarPosition='bottom'>
                 <Scene
                     title="Smileway"
