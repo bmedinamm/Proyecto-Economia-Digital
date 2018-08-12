@@ -8,6 +8,7 @@ import {
   Dimensions
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { LinearGradient } from 'expo';
 
 //Variables de ancho y alto
 var { width, height } = Dimensions.get('window');
@@ -19,7 +20,7 @@ export default class InicioSesionView extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <LinearGradient colors={['#00577c', '#1a84ab']} style={styles.container}>
         <Text style={styles.tituloText}>SmileWay</Text>
         <TextInput style={styles.textoInput}
           underlineColorAndroid='transparent'
@@ -30,7 +31,7 @@ export default class InicioSesionView extends React.Component {
           placeholder='Contraseña'
           placeholderTextColor='rgba(255,255,255,0.4)' />
         <TouchableOpacity style={styles.logInButton}>
-          <Text style={styles.logIntext}>Log In</Text>
+          <Text style={styles.logIntext}>Inicia sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.whiteText}>¿Has olvidado tu contraseña?</Text>
@@ -41,10 +42,10 @@ export default class InicioSesionView extends React.Component {
           <Text style={styles.whiteText}>Login with Facebook</Text>
         </Icon.Button>
         <TouchableOpacity style={styles.footer}>
-          <Text>¿Aún no tienes cuenta? </Text>
-          <Text style={styles.bold}>Regístrate aquí.</Text>
+          <Text style={styles.whiteText}>¿Aún no tienes cuenta? </Text>
+          <Text style={[styles.whiteText,styles.bold]}>Regístrate aquí.</Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
     );
   }
 }
@@ -53,11 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0D47A1'
-  },
-  background: {
-    flex: 1
+    justifyContent: 'center'
   },
   tituloText: {
     fontSize: 40,
@@ -70,11 +67,6 @@ const styles = StyleSheet.create({
   logIntext: {
     fontFamily: 'Roboto',
     fontSize: 15,
-    color: '#FFF'
-  },
-  registroText: {
-    fontFamily: 'Roboto',
-    fontSize: 13,
     color: '#FFF'
   },
   registroContainer: {
@@ -90,10 +82,10 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   logInButton: {
-    backgroundColor: '#82B1FF',
+    backgroundColor: '#5cb4dd',
     width: '80%',
     margin: 8,
-    borderColor: '#82B1FF',
+    borderColor: '#5cb4dd',
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -120,9 +112,8 @@ const styles = StyleSheet.create({
     height: 45,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#FFF',
     alignItems: 'center',
     position: 'absolute',
     bottom: 0
-  }
+  },
 });

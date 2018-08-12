@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import Swiper from 'react-native-swiper';
 
 class SwiperInicio extends React.Component {
@@ -56,7 +57,8 @@ class SwiperInicio extends React.Component {
           </View>
         </View>
         <View style={styles.slide1}>
-          <TouchableOpacity style={styles.logInButton}>
+          <TouchableOpacity style={styles.logInButton}
+            onPress={()=>Actions.inicioSesionView()}>
             <Text style={styles.logIntext}>Inicia sesión</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.registerButton}>
