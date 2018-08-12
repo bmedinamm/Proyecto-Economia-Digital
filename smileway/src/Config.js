@@ -28,7 +28,7 @@ import OdontologosView from './views/OdontologosView';
 mapStateToProps = (state)=>{
   //alert(JSON.stringify(state))
   return{
-    prueba: state.mostraddrBarra
+    prueba: state.mostrarBarra
   }
 }
 
@@ -118,7 +118,7 @@ class Config extends Component {
               title="Explorar" 
               key="odontologos" 
               component={OdontologosView}
-
+              hideNavBar={false}
               renderRightButton={() => (
                 <View style={styles.navBarIcons}>
                   <TouchableOpacity onPress={this.props.prueba}>

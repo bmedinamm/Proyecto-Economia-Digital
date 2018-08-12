@@ -64,7 +64,7 @@ export default class AgendaView extends Component{
           for (let j = 0; j < numItems; j++) {
             this.state.items[strTime].push({
               hour: '05:30 PM - 06:00 PM',
-              name: 'Astrid Hanoy Salguero',
+              name: 'Stephanie Daniela Suazo',
               type: 'Endodoncia',
               height: 90
             });
