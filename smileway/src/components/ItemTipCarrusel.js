@@ -15,7 +15,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class ItemUserCarrusel extends Component {
+export default class ItemTipCarrusel extends Component {
 
   constructor(props){
     super(props);
@@ -23,18 +23,30 @@ export default class ItemUserCarrusel extends Component {
 
   render() {
     return (
-      <View style={styles.containerRoot}>
-        <View style={styles.container}>
-          <Image style={styles.imagen} source={require('./../assets/img/woman.jpg')}/>
-          <Text style={styles.text}>Endodoncia</Text>
-          <Text style={styles.universidad}>UNAH</Text>
+      <TouchableOpacity>
+        <View style={styles.containerRoot}>
+          <View style={styles.container}>
+            <View style={styles.circle}>
+              <Image style={styles.imagen} source={require('./../assets/img/endodoncia.png')}/>
+            </View>
+            <Text style={styles.text}>Endodoncia</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  circle: {
+    height: 68,
+    width: 68,
+    borderRadius: 35,
+    borderColor: '#D770AD', 
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container:{
     alignItems: 'center',
     height: 100,
@@ -49,6 +61,8 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
+    borderColor: '#DDD', 
+    borderWidth: 1,
   },
   containerRoot:{
     width: 90,

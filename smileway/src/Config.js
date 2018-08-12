@@ -60,9 +60,7 @@ class Config extends Component {
                 <Scene
                     title="Smileway"
                     key="homeView"
-                    titleStyle={styles.title}
                     component={HomeView}
-                    navTransparent={true}
                     icon={({ focused }) => (
                         <Icon
                             size={30}
@@ -75,10 +73,7 @@ class Config extends Component {
                     renderRightButton={() => (
                       <View style={styles.navBarIcons}>
                         <TouchableOpacity onPress={this.abrirVistaNotificaciones}>
-                          <Icon style={styles.navBarIcon} name="md-notifications"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.abrirVistaMensajes}>
-                          <Icon style={styles.navBarIcon} name="ios-paper-plane"/>
+                          <Icon style={styles.navBarIcon} name="md-search"/>
                         </TouchableOpacity>
                       </View>
                     )}
@@ -158,7 +153,7 @@ const styles = StyleSheet.create({
   navBarIcon: {
     fontSize: 25,
     marginRight: 15,
-    color: '#FFF'
+    color: '#000'
   },
   navBarIcons: {
     flexDirection: 'row'
