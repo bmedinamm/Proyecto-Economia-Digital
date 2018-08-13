@@ -10,34 +10,93 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight,
+  Dimensions
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Video } from 'expo';
 
 export default class ItemTipCarrusel extends Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      modalVisible: false,
+      mute: false,
+      shouldPlay: true,
+    }
+  }
+
+  handlePlayAndPause = () => {  
+    this.setState((prevState) => ({
+       shouldPlay: !prevState.shouldPlay  
+    }));
+  }
+  
+  handleVolume = () => {
+    this.setState(prevState => ({
+      mute: !prevState.mute,  
+    }));
   }
 
   render() {
+    const { width } = Dimensions.get('window');
     return (
-      <TouchableOpacity>
-        <View style={styles.containerRoot}>
-          <View style={styles.container}>
-            <View style={styles.circle}>
-              <Image style={styles.imagen} source={require('./../assets/img/endodoncia.png')}/>
+      <View style={{flex: 1, backgroundColor: '#FFF'}}>
+        <TouchableOpacity onPress={() => { this.setState({modalVisible: true});}}>
+          <View style={styles.containerRoot}>
+            <View style={styles.container}>
+              <View style={styles.circle}>
+                <Image style={styles.imagen} source={{uri: this.props.tips.imagen}}/>
+              </View>
+              <Text style={styles.text}>{this.props.tips.titulo}</Text>
             </View>
-            <Text style={styles.text}>Endodoncia</Text>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{flex: 1, backgroundColor: '#000'}}>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.container}>
+                <Video
+                  source={{ uri: this.props.tips.video}}
+                  shouldPlay={this.state.shouldPlay}
+                  resizeMode="cover"
+                  style={{ width, height: 300, alignSelf: 'center' }}
+                  isMuted={this.state.mute}
+                  volume={1.0}
+                  playsInSilentLockedModeIOS={true}
+                />
+              </View>
+          </View>
+        </Modal>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  closeContent: {
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    padding: 20
+  },
+  closeIcon: {
+    color: '#FFF',
+    fontSize: 30
+  },
   circle: {
     height: 68,
     width: 68,
@@ -67,6 +126,22 @@ const styles = StyleSheet.create({
   containerRoot:{
     width: 90,
     height: 100,
-    paddingTop: 10
+    paddingTop: 10,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  controlBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 45,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   }
 });

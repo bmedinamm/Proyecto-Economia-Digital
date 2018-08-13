@@ -20,7 +20,10 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  RefreshControl,
+  TouchableHighlight,
+  Modal
 } from 'react-native';
 
 
@@ -30,35 +33,43 @@ export default class HomeView extends Component{
   constructor(){
     super();
     this.state = {
-      listaOdontologos: []
+      listaOdontologos: [],
+      refreshing: false,
+      modalVisible: false
     }
+    this._onRefresh();
+  }
 
+  //Brayan: Funcion que se ejecuta al hacer scroll hacia abajo
+  _onRefresh = () => {
+    this.setState({refreshing: true});
     let that = this;
     //Obtenemos la lista de notas creadas por el usuario
-    db.collection("odontologos/")
-      .get()
+    db.collection("odontologos/").get()
       .then(function(querySnapshot) {
         let odontologos = [];
         querySnapshot.forEach(function(doc) {
           odontologos.push(doc.data());
         });
         that.setState({listaOdontologos: odontologos});
+        that.setState({refreshing: false});
       })
       .catch(function(error) {
-          alert(error)
+          alert('Ha ocurrido un error, intentelo mas tarde')
       });
-  }
-
-  obtenerOdontologos = () => {
-    for(let i = 0; i < 10; i++){
-      return <ItemUserList/>
-    }
-  }
+  };
 
   render() {
     return (
       <View style={{flex: 1}}>
-        <ScrollView style={{flex: 1}}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+         style={{flex: 1}}>
           <TipsCarrusel/>
           <View style={styles.rootContainer}>
             <FlatList

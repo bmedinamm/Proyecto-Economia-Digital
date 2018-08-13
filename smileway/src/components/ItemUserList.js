@@ -12,7 +12,7 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
-
+import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class ItemUserList extends Component {
@@ -20,21 +20,26 @@ export default class ItemUserList extends Component {
   constructor(props){
     super(props);
   }
+  
+  abrirPerfilOdontologo = (odontologo) => {
+    Actions.otroPerfil(odontologo);
+  }
 
   render() {
-    return (
-      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
-        <View style={styles.containerRoot}>
-          <View style={styles.container}>
-            <Image style={styles.imagen} source={{uri: this.props.user.imagen}}/>
-            <Text style={styles.text}>{this.props.user.nombreCorto}</Text>
-            <Text style={styles.universidad}>{this.props.user.cantidadServicios} servicios</Text>
+      return (
+        <TouchableOpacity onPress={()=>{this.abrirPerfilOdontologo(this.props.user)}} style={{flex: 1, justifyContent: 'center'}}>
+          <View style={styles.containerRoot}>
+            <View style={styles.container}>
+              <Image style={styles.imagen} source={{uri: this.props.user.imagen}}/>
+              <Text style={styles.text}>{this.props.user.nombreCorto}</Text>
+              <Text style={styles.universidad}>{this.props.user.cantidadServicios} servicios</Text>
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    }
   }
-}
+
 
 const styles = StyleSheet.create({
   container:{
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     borderColor: '#DDD', 
     borderWidth: 1,
+    backgroundColor: '#efefef'
   },
   containerRoot:{
     width: 90,

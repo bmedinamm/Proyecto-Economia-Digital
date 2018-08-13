@@ -18,7 +18,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import HomeView from './views/HomeView';
 import AgendaView from './views/AgendaView';
-import PerfilView from './views/PerfilView';
+import MiPerfilView from './views/MiPerfilView';
+import OtroPerfilView from './views/OtroPerfilView';
 import NotificacionesView from './views/NotificacionesView';
 import MisCitasView from './views/MisCitasView';
 import InteresesView from './views/InteresesView';
@@ -45,25 +46,7 @@ class Config extends Component {
     return (
       <Router>
           <Stack key="root">
-            <Scene
-              title='Swiper Inicial'
-              key='swiperInicialView'
-              hideNavBar={true}
-              component={SwiperInicialView}>
-            </Scene>
-            <Scene
-              title='Inicio de Sesion'
-              key='inicioSesionView'
-              hideNavBar={true}
-              component={InicioSesionView}>
-            </Scene>
-            <Scene
-              title='Registro'
-              key='registrarseView'
-              hideNavBar={true}
-              component={RegistrarseView}>
-            </Scene>
-            <Tabs showLabel={false} tabBarPosition='bottom'>
+            <Tabs showLabel={false} tabBarPosition='bottom' wrap={false}>
                 <Scene
                     title="Smileway"
                     key="homeView"
@@ -116,8 +99,8 @@ class Config extends Component {
                 />
                 <Scene
                     title="Smileway"
-                    key="perfilView"
-                    component={PerfilView}
+                    key="miPerfilView"
+                    component={MiPerfilView}
                     icon={({ focused }) => (
                         <Icon
                             size={30}
@@ -128,6 +111,24 @@ class Config extends Component {
                     )}
                 />
             </Tabs>
+            <Scene
+              title='Swiper Inicial'
+              key='swiperInicialView'
+              hideNavBar={true}
+              component={SwiperInicialView}>
+            </Scene>
+            <Scene
+              title='Inicio de Sesion'
+              key='inicioSesionView'
+              hideNavBar={true}
+              component={InicioSesionView}>
+            </Scene>
+            <Scene
+              title='Registro'
+              key='registrarseView'
+              hideNavBar={true}
+              component={RegistrarseView}>
+            </Scene>
             <Scene title="Notificaciones" key="notificaciones" component={NotificacionesView}/>
             <Scene title="Mensajes" key="mensajes" component={MensajesView}/>
             <Scene 
@@ -143,6 +144,7 @@ class Config extends Component {
                 </View>
               )}
             />
+            <Scene title="Perfil" key="otroPerfil" component={OtroPerfilView}/>
           </Stack>
         </Router>
     );

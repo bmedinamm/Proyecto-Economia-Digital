@@ -19,7 +19,7 @@ import {
   FlatList,
 } from 'react-native';
 
-export default class PerfilView extends Component{
+export default class OtroPerfilView extends Component{
 
   
   constructor(){
@@ -42,35 +42,29 @@ export default class PerfilView extends Component{
         <View style={styles.rootContainer}>
           <View style={styles.information}>
             <View style={styles.imageContainer}>
-              <Image style={styles.imagen} source={require('./../assets/img/woman.jpg')}/>
+              <Image style={styles.imagen} source={{uri: this.props.imagen}}/>
             </View>
             <View style={styles.informationContainer}>
-              <Text style={styles.name}>Hastrid Hanoy Salguero</Text>
-              <Text style={styles.text}>astrid@unah.hn</Text>
-              <Text style={styles.text}>+504 9999-9999</Text>
+              <Text style={styles.name}>{this.props.nombre}</Text>
+              <Text style={styles.text}>{this.props.correo}</Text>
+              <Text style={styles.text}>{this.props.telefono}</Text>
             </View>
           </View>
           <View style={styles.collegeInformatio}> 
             <View style={styles.headerContainer}>
               <Text style={styles.header}>Educación</Text>
-              <TouchableOpacity>
-                <Icon style={styles.editIcon} name="md-create"/>
-              </TouchableOpacity>
             </View>
             <View style={styles.collegeContent}>
               <View style={styles.imgCollegeContent}>
-                <Image style={styles.imagenCollege} source={require('./../assets/img/unah.png')}/>
+                <Image style={styles.imagenCollege} source={{uri: this.props.universidad.imagen}}/>
               </View>
               <View style={styles.informationCollegeContent}>
-                <Text style={styles.college}>Universidad Nacional Autonoma de Honduras (UNAH)</Text>
-                <Text>2012 - 2018</Text>
+                <Text style={styles.college}>{this.props.universidad.nombre}</Text>
+                <Text>{this.props.universidad.anioInicial} - 2018</Text>
               </View>
             </View>
             <View style={styles.headerContainer}>
               <Text style={styles.header}>Servicios brindados</Text>
-              <TouchableOpacity>
-                <Icon style={styles.editIcon} name="md-create"/>
-              </TouchableOpacity>
             </View>
             <FlatList
               data={[
@@ -100,9 +94,6 @@ export default class PerfilView extends Component{
             />
             <View style={[styles.headerContainer, {marginTop: 20}]}>
               <Text style={styles.header}>Galería de imágenes</Text>
-              <TouchableOpacity>
-                <Icon style={styles.editIcon} name="md-create"/>
-              </TouchableOpacity>
             </View>
             <ImagesCarrusel/>
           </View>
@@ -225,5 +216,8 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
+    borderColor: '#DDD', 
+    borderWidth: 1,
+    backgroundColor: '#efefef'
   },
 });

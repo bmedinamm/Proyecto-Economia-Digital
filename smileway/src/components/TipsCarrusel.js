@@ -18,11 +18,36 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {db} from './../commons/constants';
 
 export default class TipsCarrusel extends Component {
 
   constructor(props){
     super(props);
+
+    this.state = {
+      listaTips: []
+    }
+    let that = this;
+    db.collection("tips/").get()
+      .then(function(querySnapshot) {
+        let tips = [];
+        querySnapshot.forEach(function(doc) {
+          tips.push(doc.data());
+        });
+        that.setState({listaTips: tips});
+      })
+      .catch(function(error) {
+          alert('Ha ocurrido un error, intentelo mas tarde')
+      });
+  }
+
+  renderTips = () => {
+    let list = [];
+    for(let i = 0; i<this.state.listaTips.length; i++){
+      list.push(<ItemTipCarrusel tips={this.state.listaTips[i]}/>)
+    }
+    return list;
   }
 
   abrirVistaOdontologos(){
@@ -33,26 +58,11 @@ export default class TipsCarrusel extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.titulo}>Tips odontológicos</Text>
+          <Text style={styles.titulo}>Aprende sobre odontología</Text>
         </View>
         <View style={styles.carrusel}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
-            <ItemTipCarrusel/>
+            {this.renderTips()}
           </ScrollView>
         </View>
       </View>
