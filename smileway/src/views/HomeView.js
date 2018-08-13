@@ -104,27 +104,27 @@ const styles = StyleSheet.create({
   txt3: {
     fontSize: 22,
     marginLeft: 10,
-    color: '#37BC9B'
+    color: '#3BAFDA'
   },
   txt1: {
     marginLeft: 5,
     fontSize: 13,
-    color: '#37BC9B',
+    color: '#3BAFDA',
     fontWeight: '600'
   },
   txt2: {
     marginLeft: 5,
     fontSize: 13,
-    color: '#37BC9B',
+    color: '#3BAFDA',
     fontWeight: '600'
   },
   icon1: {
     fontSize: 18,
-    color: '#37BC9B'
+    color: '#3BAFDA'
   },
   icon2: {
     fontSize: 18,
-    color: '#37BC9B'
+    color: '#3BAFDA'
   },
   float1: {
     flex: 1,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 30,
     padding: 5,
-    borderColor: '#37BC9B', 
+    borderColor: '#3BAFDA', 
     borderWidth: 1.2,
   },
   rootContainer: {

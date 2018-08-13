@@ -46,7 +46,7 @@ class Config extends Component {
     return (
       <Router>
           <Stack key="root">
-            <Tabs showLabel={false} tabBarPosition='bottom' wrap={false}>
+            <Tabs showLabel={false} tabBarPosition='bottom' wrap={true}>
                 <Scene
                     title="Smileway"
                     key="homeView"

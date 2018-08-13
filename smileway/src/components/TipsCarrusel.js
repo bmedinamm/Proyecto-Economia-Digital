@@ -58,7 +58,7 @@ export default class TipsCarrusel extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.titulo}>Aprende sobre odontología</Text>
+          <Text style={styles.titulo}>Espacio de aprendizaje</Text>
         </View>
         <View style={styles.carrusel}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
   },
   container:{
     backgroundColor: '#FFF',
-    marginBottom: 10
+    marginBottom: 10,
+    height: 130
   },
   carrusel: {
     flexDirection: 'row',
