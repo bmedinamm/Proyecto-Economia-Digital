@@ -57,7 +57,7 @@ export default class UniversitiesList extends Component {
           <View style={{marginLeft: 10, marginRight: 10}}>
             <TextInput 
               style={styles.inputSearch}
-              placeholder="Buscar..."
+              placeholder="Buscar por siglas..."
               value={this.props.inputSearch}
               onChangeText={(value) => {
                 this.filtrarUniversidades(value)
@@ -73,6 +73,12 @@ export default class UniversitiesList extends Component {
               renderItem={({item}) => <ItemUniversity config={{filtrarRegistros: this.props.config.filtrarRegistros}} university={item}/>}
             />
           </View>
+          <View style={styles.floatButton}>
+            <TouchableOpacity onPress={() => {this.props.config.filtrarRegistros(undefined, undefined)}} style={{flexDirection: 'row'}}>
+              <Icon style={styles.icon1} name="md-trash" />
+              <Text style={styles.txt3}>Remover filtro</Text>
+            </TouchableOpacity>
+        </View>
         </View>
       );
     }
@@ -80,6 +86,30 @@ export default class UniversitiesList extends Component {
 
 
 const styles = StyleSheet.create({
+  icon1: {
+    fontSize: 18,
+    color: '#3BAFDA'
+  },
+  txt3: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: '#3BAFDA'
+  },
+  floatButton: {
+    position: 'fixe',
+    width: 230,
+    height: 45,
+    alignSelf: 'center',
+    bottom: 30,
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    borderRadius: 30,
+    padding: 5,
+    borderColor: '#3BAFDA', 
+    borderWidth: 1.2,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   inputSearch: {
     backgroundColor: '#ddd', 
     height: 35,

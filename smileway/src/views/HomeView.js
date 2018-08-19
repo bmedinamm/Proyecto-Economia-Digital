@@ -14,6 +14,7 @@ import TipsCarrusel from './../components/TipsCarrusel';
 import Button from 'apsl-react-native-button';
 import {db} from './../commons/constants';
 import UniversitiesList from './../components/UniversitiesList';
+import ItemService from './../components/ItemService';
 import {
   StyleSheet,
   Text,
@@ -150,6 +151,20 @@ export default class HomeView extends Component{
                   <Icon style={styles.closeIcon} name="md-close"/>
                 </TouchableOpacity>
               </View>
+              <View style={styles.gridServices}>
+                <ItemService/>
+                <ItemService/>
+                <ItemService/>
+                <ItemService/>
+                <ItemService/>
+                <ItemService/>
+              </View>
+              <View style={[styles.floatButton, {alignItems: 'center',justifyContent: 'center', bottom: 30}]}>
+                  <TouchableOpacity onPress={() => {this.state.filtrarRegistros(undefined, undefined)}} style={{flexDirection: 'row'}}>
+                    <Icon style={styles.icon1} name="md-options" />
+                    <Text style={styles.txt4}>Aplicar filtro</Text>
+                  </TouchableOpacity>
+              </View>
           </View>
         </Modal>
         /*Fin de modal para filtros de servicios*/
@@ -159,6 +174,19 @@ export default class HomeView extends Component{
 }
 
 const styles = StyleSheet.create({
+  gridServices: {
+    flex: 1, 
+    marginTop: 70, 
+    padding: 15,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around'
+  },
+  txt4: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: '#3BAFDA'
+  },
   closeContent: {
     flexDirection: 'row',
     paddingLeft: 20,
