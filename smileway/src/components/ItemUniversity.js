@@ -23,13 +23,13 @@ export default class ItemUniversity extends Component {
 
   render() {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {this.props.config.filtrarRegistros(this.props.university.codigo, undefined)}}>
         <View style={styles.containerRoot}>
           <View style={styles.container}>
-            <Image style={styles.banner} source={require('./../assets/img/banner.jpg')}/>
+            <Image style={styles.banner} source={{uri: this.props.university.banner}}/>
             <View style={styles.layout}>
-              <Image style={styles.imagen} source={require('./../assets/img/unah.png')}/>
-              <Text style={styles.text}>Universidad Nacional Autonoma de Honduras (UNAH)</Text>
+              <Image style={styles.imagen} source={{uri: this.props.university.imagen}}/>
+              <Text style={styles.text}>{this.props.university.nombre}</Text>
             </View>
           </View>
         </View>
@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     textAlign: 'center',
-    color: '#FFF'
+    color: '#FFF',
+    width: '90%'
   },
   imagen: {
     height: 40,

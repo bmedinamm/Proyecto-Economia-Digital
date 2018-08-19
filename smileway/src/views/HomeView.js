@@ -13,7 +13,7 @@ import ItemUserList from './../components/ItemUserList';
 import TipsCarrusel from './../components/TipsCarrusel';
 import Button from 'apsl-react-native-button';
 import {db} from './../commons/constants';
-import ItemUniversity from './../components/ItemUniversity';
+import UniversitiesList from './../components/UniversitiesList';
 import {
   StyleSheet,
   Text,
@@ -24,7 +24,6 @@ import {
   RefreshControl,
   TouchableHighlight,
   Modal,
-  TextInput
 } from 'react-native';
 
 export default class HomeView extends Component{
@@ -34,19 +33,32 @@ export default class HomeView extends Component{
     super();
     this.state = {
       listaOdontologos: [],
-      mostrarSpinner: false,
+      listaUniversidades: [],
+      mostrarSpinner: true,
       mostrarFiltroUniversidades: false,
-      mostrarFiltroServicios: false
+      mostrarFiltroServicios: false,
+      filtrarRegistros: (codigoUniversidad, codigoServicio) => {
+        this.setState({mostrarFiltroUniversidades: false, mostrarFiltroServicios: false})
+        this._onRefresh(codigoUniversidad, codigoServicio);
+      }
     }
-    this._onRefresh();
+    this._onRefresh(undefined, undefined);
   }
 
   //Brayan: Funcion que se ejecuta al hacer scroll hacia abajo
-  _onRefresh = () => {
+  _onRefresh = (codigoUniversidad, codigoServicio) => {
     this.setState({mostrarSpinner: true});
     let that = this;
-    //Obtenemos la lista de notas creadas por el usuario
-    db.collection("odontologos/").get()
+    let referencia;
+    
+    //Se aplica cuando solo se quiere filtrar por universidad
+    if(codigoUniversidad != undefined && codigoServicio == undefined)
+      referencia =  db.collection("odontologos/").where('universidad.codigo', '==', codigoUniversidad)
+    else
+      referencia = db.collection("odontologos/");
+
+    //Aplicamos la referencia indicada
+    referencia.get()
       .then(function(querySnapshot) {
         let odontologos = [];
         querySnapshot.forEach(function(doc) {
@@ -59,6 +71,14 @@ export default class HomeView extends Component{
           alert('Ha ocurrido un error, intentelo mas tarde')
       });
   };
+
+  renderUniversidades = () => {
+    let list = [];
+    for(let i = 0; i<this.state.listaTips.length; i++){
+      list.push(<ItemTipCarrusel tips={this.state.listaTips[i]}/>)
+    }
+    return list;
+  }
 
   render() {
     return (
@@ -111,23 +131,7 @@ export default class HomeView extends Component{
                   <Icon style={styles.closeIcon} name="md-close"/>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 75, marginLeft: 10, marginRight: 10}}>
-                <TextInput 
-                  style={styles.inputSearch}
-                  placeholder="Buscar..."
-                />
-                <Icon style={styles.iconSearch} name="md-search"/>
-              </View>
-              <View style={{flex: 1, paddingTop: 20}}>
-                <ScrollView contentContainerStyle={styles.rowUniversities}>
-                  <ItemUniversity/>
-                  <ItemUniversity/>
-                  <ItemUniversity/>
-                  <ItemUniversity/>
-                  <ItemUniversity/>
-                  <ItemUniversity/>
-                </ScrollView>
-              </View>
+              <UniversitiesList config={{filtrarRegistros: this.state.filtrarRegistros}}/>
           </View>
         </Modal>
         /*Fin de modal para filtros de universidad*/
@@ -155,23 +159,6 @@ export default class HomeView extends Component{
 }
 
 const styles = StyleSheet.create({
-  iconSearch: {
-    position: 'absolute',
-    fontSize: 20,
-    marginTop: 8,
-    marginLeft: 10
-  },
-  inputSearch: {
-    backgroundColor: '#ddd', 
-    height: 35,
-    paddingLeft: 30
-  },
-  rowUniversities: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   closeContent: {
     flexDirection: 'row',
     paddingLeft: 20,
