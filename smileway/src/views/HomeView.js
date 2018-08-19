@@ -34,15 +34,16 @@ export default class HomeView extends Component{
     super();
     this.state = {
       listaOdontologos: [],
-      refreshing: false,
-      modalVisible: false
+      mostrarSpinner: false,
+      mostrarFiltroUniversidades: false,
+      mostrarFiltroServicios: false
     }
     this._onRefresh();
   }
 
   //Brayan: Funcion que se ejecuta al hacer scroll hacia abajo
   _onRefresh = () => {
-    this.setState({refreshing: true});
+    this.setState({mostrarSpinner: true});
     let that = this;
     //Obtenemos la lista de notas creadas por el usuario
     db.collection("odontologos/").get()
@@ -52,7 +53,7 @@ export default class HomeView extends Component{
           odontologos.push(doc.data());
         });
         that.setState({listaOdontologos: odontologos});
-        that.setState({refreshing: false});
+        that.setState({mostrarSpinner: false});
       })
       .catch(function(error) {
           alert('Ha ocurrido un error, intentelo mas tarde')
@@ -65,7 +66,7 @@ export default class HomeView extends Component{
         <ScrollView
           refreshControl={
             <RefreshControl
-              refreshing={this.state.refreshing}
+              refreshing={this.state.mostrarSpinner}
               onRefresh={this._onRefresh}
             />
           }
@@ -82,25 +83,71 @@ export default class HomeView extends Component{
         </ScrollView>
         <View style={styles.floatButton}>
             <View style={styles.float1}>
-              <TouchableOpacity style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{this.setState({mostrarFiltroUniversidades: true})}} style={{flexDirection: 'row'}}>
                 <Icon style={styles.icon1} name="md-school"/>
                 <Text style={styles.txt1}>Universidad</Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.txt3}>|</Text>
             <View style={styles.float2}>
-              <TouchableOpacity style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{this.setState({mostrarFiltroServicios: true})}}  style={{flexDirection: 'row'}}>
                 <Icon style={styles.icon2} name="md-options"/>
                 <Text style={styles.txt2}>Servicio</Text>
               </TouchableOpacity>
             </View>
         </View>
+
+        /*Inicio de modal para filtros de universidad*/
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.mostrarFiltroUniversidades}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{flex: 1}}>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({mostrarFiltroUniversidades: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
+        /*Fin de modal para filtros de universidad*/
+
+        /*Inicio de modal para filtros de servicios*/
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.mostrarFiltroServicios}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{flex: 1}}>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({mostrarFiltroServicios: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
+        /*Fin de modal para filtros de servicios*/
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  closeContent: {
+    flexDirection: 'row',
+    paddingLeft: 20,
+    paddingTop: 30,
+    position: 'absolute',
+  },
+  closeIcon: {
+    color: '#000',
+    fontSize: 30
+  },
   txt3: {
     fontSize: 22,
     marginLeft: 10,

@@ -64,12 +64,7 @@ export default class ItemTipCarrusel extends Component {
             alert('Modal has been closed.');
           }}>
           <View style={{flex: 1, backgroundColor: '#000'}}>
-              <View style={styles.closeContent}>
-                <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
-                  <Icon style={styles.closeIcon} name="md-close"/>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.container}>
+              <View style={styles.videoContainer}>
                 <Video
                   source={{ uri: this.props.tips.video}}
                   shouldPlay={this.state.shouldPlay}
@@ -80,6 +75,11 @@ export default class ItemTipCarrusel extends Component {
                   playsInSilentLockedModeIOS={true}
                 />
               </View>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
           </View>
         </Modal>
       </View>
@@ -89,9 +89,10 @@ export default class ItemTipCarrusel extends Component {
 
 const styles = StyleSheet.create({
   closeContent: {
-    justifyContent: 'flex-end',
     flexDirection: 'row',
-    padding: 20
+    paddingLeft: 20,
+    paddingTop: 30,
+    position: 'absolute',
   },
   closeIcon: {
     color: '#FFF',
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     height: 100,
     paddingTop: 10,
   },
-  container: {
+  videoContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
