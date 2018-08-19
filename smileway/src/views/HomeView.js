@@ -25,6 +25,7 @@ import {
   RefreshControl,
   TouchableHighlight,
   Modal,
+  Card
 } from 'react-native';
 
 export default class HomeView extends Component{
@@ -35,15 +36,41 @@ export default class HomeView extends Component{
     this.state = {
       listaOdontologos: [],
       listaUniversidades: [],
+      listaServicios: [],
       mostrarSpinner: true,
       mostrarFiltroUniversidades: false,
       mostrarFiltroServicios: false,
       filtrarRegistros: (codigoUniversidad, codigoServicio) => {
         this.setState({mostrarFiltroUniversidades: false, mostrarFiltroServicios: false})
         this._onRefresh(codigoUniversidad, codigoServicio);
+      },
+      seleccionarServicio: (codigo) =>{
+        let servicios = this.state.listaServicios;
+        for(let i = 0; i<servicios.length; i++){
+          if(servicios[i].codigo == codigo){
+            servicios[i].seleccionado = !servicios[i].seleccionado;
+            break;
+          }
+        }
+        this.setState({listaServicios: servicios})
       }
     }
     this._onRefresh(undefined, undefined);
+  }
+
+  componentWillMount = () =>{
+    let that = this;
+    db.collection("servicios/").get()
+      .then(function(querySnapshot) {
+        let servicios = [];
+        querySnapshot.forEach(function(doc) {
+          servicios.push({seleccionado: false, ...doc.data()});
+        });
+        that.setState({listaServicios: servicios});
+      })
+      .catch(function(error) {
+          alert('Ha ocurrido un error, intentelo mas tarde')
+      });
   }
 
   //Brayan: Funcion que se ejecuta al hacer scroll hacia abajo
@@ -77,6 +104,14 @@ export default class HomeView extends Component{
     let list = [];
     for(let i = 0; i<this.state.listaTips.length; i++){
       list.push(<ItemTipCarrusel tips={this.state.listaTips[i]}/>)
+    }
+    return list;
+  }
+
+  renderServicios = () => {
+    let list = [];
+    for(let i = 0; i<this.state.listaServicios.length; i++){
+      list.push(<ItemService config={this.state.seleccionarServicio} servicio={this.state.listaServicios[i]}/>)
     }
     return list;
   }
@@ -141,27 +176,23 @@ export default class HomeView extends Component{
         <Modal
           animationType="slide"
           transparent={false}
-          visible={this.state.mostrarFiltroServicios}
-          onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
+          visible={this.state.mostrarFiltroServicios}>
           <View style={{flex: 1}}>
+              <ScrollView contentContainerStyle={{paddingTop: 80}}>
+                <Text style={styles.cardTitle}>Filtra por servicio (tratamiento)</Text>
+                <Text style={styles.cardContent}>Le recomendamos reservar una cita en caso que desconozca el tipo de tratamiento que usted requiere</Text>
+                <View style={styles.gridServices}>
+                  {this.renderServicios()}
+                </View>
+              </ScrollView>
               <View style={styles.closeContent}>
                 <TouchableOpacity onPress={() => {this.setState({mostrarFiltroServicios: false})}}>
                   <Icon style={styles.closeIcon} name="md-close"/>
                 </TouchableOpacity>
               </View>
-              <View style={styles.gridServices}>
-                <ItemService/>
-                <ItemService/>
-                <ItemService/>
-                <ItemService/>
-                <ItemService/>
-                <ItemService/>
-              </View>
-              <View style={[styles.floatButton, {alignItems: 'center',justifyContent: 'center', bottom: 30}]}>
+              <View style={[styles.floatButton, {alignItems: 'center',justifyContent: 'center', bottom: 30, backgroundColor: '#3BAFDA'}]}>
                   <TouchableOpacity onPress={() => {this.state.filtrarRegistros(undefined, undefined)}} style={{flexDirection: 'row'}}>
-                    <Icon style={styles.icon1} name="md-options" />
+                    <Icon style={[styles.icon1, {color: '#FFF'}]} name="md-options" />
                     <Text style={styles.txt4}>Aplicar filtro</Text>
                   </TouchableOpacity>
               </View>
@@ -174,9 +205,30 @@ export default class HomeView extends Component{
 }
 
 const styles = StyleSheet.create({
+  cardTitle: {
+    textAlign: 'left',
+    color: '#606060',
+    fontSize: 20,
+    marginLeft: 25,
+    fontWeight: '600'
+  },
+  cardContent: {
+    color: '#909090',
+    marginTop: 5,
+    marginLeft: 25
+  },
+  card: {
+    height: 100,
+    justifyContent: 'center',
+    marginTop: 80,
+    margin: 15,
+    padding: 20,
+    borderRadius: 5,
+    borderColor: '#7f8c8d', 
+    borderWidth: 0.5,
+  },
   gridServices: {
     flex: 1, 
-    marginTop: 70, 
     padding: 15,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -185,13 +237,15 @@ const styles = StyleSheet.create({
   txt4: {
     fontSize: 16,
     marginLeft: 10,
-    color: '#3BAFDA'
+    color: '#FFF'
   },
   closeContent: {
     flexDirection: 'row',
     paddingLeft: 20,
     paddingTop: 30,
     position: 'absolute',
+    backgroundColor: '#FFF',
+    width: '100%'
   },
   closeIcon: {
     color: '#000',

@@ -10,7 +10,7 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,17 +19,17 @@ export default class ItemService extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      seleccionado: false
-    }
   }
 
   render() {
     return (
-      <TouchableOpacity onPress={() => {this.setState({seleccionado: !this.state.seleccionado})}}>
+      <TouchableOpacity 
+        onPress={() => {
+          this.props.config(this.props.servicio.codigo)
+        }}>
         <View style={styles.containerRoot}>
-          {this.state.seleccionado ? <Icon style={styles.icon1} name="ios-checkmark-circle" />: <Icon style={styles.icon1} name="ios-checkmark-circle-outline" />}
-          <Text style={styles.text}>Endodoncia</Text>
+          {this.props.servicio.seleccionado ? <Icon style={styles.icon1} name="ios-checkmark-circle" />: <Icon style={styles.icon1} name="ios-checkmark-circle-outline" />}
+          <Text style={styles.text}>{this.props.servicio.nombre}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -39,21 +39,23 @@ export default class ItemService extends Component {
 const styles = StyleSheet.create({
   icon1: {
     fontSize: 50,
-    color: '#37BC9B', 
+    color: '#d35400', 
   },
   text: {
     textAlign: 'center',
     fontWeight: '500',
     color: '#606060',
+    fontSize: 12
   },
   containerRoot: {
     height: 110,
     width: 100,
-    borderColor: '#37BC9B', 
-    borderWidth: 1.2,
+    borderColor: '#7f8c8d', 
+    borderWidth: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
-    marginTop: 15
+    marginTop: 15,
+    padding: 10
   }
 });
