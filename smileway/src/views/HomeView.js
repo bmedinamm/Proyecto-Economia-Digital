@@ -13,7 +13,7 @@ import ItemUserList from './../components/ItemUserList';
 import TipsCarrusel from './../components/TipsCarrusel';
 import Button from 'apsl-react-native-button';
 import {db} from './../commons/constants';
-
+import ItemUniversity from './../components/ItemUniversity';
 import {
   StyleSheet,
   Text,
@@ -23,9 +23,9 @@ import {
   FlatList,
   RefreshControl,
   TouchableHighlight,
-  Modal
+  Modal,
+  TextInput
 } from 'react-native';
-
 
 export default class HomeView extends Component{
 
@@ -111,6 +111,23 @@ export default class HomeView extends Component{
                   <Icon style={styles.closeIcon} name="md-close"/>
                 </TouchableOpacity>
               </View>
+              <View style={{marginTop: 75, marginLeft: 10, marginRight: 10}}>
+                <TextInput 
+                  style={styles.inputSearch}
+                  placeholder="Buscar..."
+                />
+                <Icon style={styles.iconSearch} name="md-search"/>
+              </View>
+              <View style={{flex: 1, paddingTop: 20}}>
+                <ScrollView contentContainerStyle={styles.rowUniversities}>
+                  <ItemUniversity/>
+                  <ItemUniversity/>
+                  <ItemUniversity/>
+                  <ItemUniversity/>
+                  <ItemUniversity/>
+                  <ItemUniversity/>
+                </ScrollView>
+              </View>
           </View>
         </Modal>
         /*Fin de modal para filtros de universidad*/
@@ -138,6 +155,23 @@ export default class HomeView extends Component{
 }
 
 const styles = StyleSheet.create({
+  iconSearch: {
+    position: 'absolute',
+    fontSize: 20,
+    marginTop: 8,
+    marginLeft: 10
+  },
+  inputSearch: {
+    backgroundColor: '#ddd', 
+    height: 35,
+    paddingLeft: 30
+  },
+  rowUniversities: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   closeContent: {
     flexDirection: 'row',
     paddingLeft: 20,

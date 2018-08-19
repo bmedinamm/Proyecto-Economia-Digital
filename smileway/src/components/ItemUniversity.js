@@ -15,7 +15,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class ItemUniversitiesCarrusel extends Component {
+export default class ItemUniversity extends Component {
 
   constructor(props){
     super(props);
@@ -23,15 +23,17 @@ export default class ItemUniversitiesCarrusel extends Component {
 
   render() {
     return (
-      <View style={styles.containerRoot}>
-        <View style={styles.container}>
-          <Image style={styles.banner} source={require('./../assets/img/banner.jpg')}/>
-          <View style={styles.layout}>
-            <Image style={styles.imagen} source={require('./../assets/img/unah.png')}/>
-            <Text style={styles.text}>Facultad odontología UNAH</Text>
+      <TouchableOpacity>
+        <View style={styles.containerRoot}>
+          <View style={styles.container}>
+            <Image style={styles.banner} source={require('./../assets/img/banner.jpg')}/>
+            <View style={styles.layout}>
+              <Image style={styles.imagen} source={require('./../assets/img/unah.png')}/>
+              <Text style={styles.text}>Universidad Nacional Autonoma de Honduras (UNAH)</Text>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(1,1,1,0.5)',
     alignItems: 'center',
     borderRadius: 10,
-    paddingTop: 15
+    paddingTop: 10
   },
   banner: {
     width: '100%',
@@ -72,8 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   containerRoot:{
-    width: 135,
-    height: 130,
-    paddingTop: 10,
+    width: 130,
+    height: 125,
   }
 });
