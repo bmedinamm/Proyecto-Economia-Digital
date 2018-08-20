@@ -23,10 +23,10 @@ export default class ItemImageCarrusel extends Component {
 
   render() {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>{this.props.event(this.props.imagen.indice)}}>
         <View style={styles.containerRoot}>
           <View style={styles.container}>
-            <Image style={styles.banner} source={require('./../assets/img/banner.jpg')}/>
+            <Image style={styles.banner} source={{uri: this.props.imagen.url}}/>
           </View>
         </View>
       </TouchableOpacity>
@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+    borderColor: '#DDD', 
+    borderWidth: 1,
   },
   container:{
     alignItems: 'center',

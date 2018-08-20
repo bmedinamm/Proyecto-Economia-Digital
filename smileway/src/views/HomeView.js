@@ -25,7 +25,6 @@ import {
   RefreshControl,
   TouchableHighlight,
   Modal,
-  Card
 } from 'react-native';
 
 export default class HomeView extends Component{

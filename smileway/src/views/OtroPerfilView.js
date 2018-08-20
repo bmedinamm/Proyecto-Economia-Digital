@@ -17,6 +17,7 @@ import {
   Image,
   AppRegistry, 
   FlatList,
+  Modal
 } from 'react-native';
 
 export default class OtroPerfilView extends Component{
@@ -24,6 +25,10 @@ export default class OtroPerfilView extends Component{
   
   constructor(){
     super();
+    this.state = {
+      listaImagenes: [],
+      mostrarModalGaleria: false
+    }
     this.list = [
       {
         title: 'Endodoncia',
@@ -38,7 +43,7 @@ export default class OtroPerfilView extends Component{
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{flex: 1}}>
         <View style={styles.rootContainer}>
           <View style={styles.information}>
             <View style={styles.imageContainer}>
@@ -67,11 +72,7 @@ export default class OtroPerfilView extends Component{
               <Text style={styles.header}>Servicios brindados</Text>
             </View>
             <FlatList
-              data={[
-                {key: 'Endodoncia'},
-                {key: 'Periodoncia'},
-                {key: 'Periodontopatia'}
-              ]}
+              data={this.props.listaServicios}
               renderItem={({item}) =>
                 <TouchableOpacity> 
                   <View style={styles.itemList}>
@@ -80,8 +81,8 @@ export default class OtroPerfilView extends Component{
                     </View>
                     <View style={styles.informationListContent}>
                       <View style={styles.content1}>
-                        <Text style={styles.txt1Item}>{item.key}</Text>
-                        <Text style={styles.txt2Item}>Tratamiento gratuito</Text>
+                        <Text style={styles.txt1Item}>{item.nombre}</Text>
+                        <Text style={styles.txt2Item}>{item.costo}</Text>
                       </View>
                       <View style={styles.content2}>
                         <Text style={styles.more}>Más información</Text>
@@ -95,7 +96,7 @@ export default class OtroPerfilView extends Component{
             <View style={[styles.headerContainer, {marginTop: 20}]}>
               <Text style={styles.header}>Galería de imágenes</Text>
             </View>
-            <ImagesCarrusel/>
+            <ImagesCarrusel odontologo={{codigo: this.props.codigo}}/>
           </View>
         </View>
       </ScrollView>
