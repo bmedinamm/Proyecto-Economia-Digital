@@ -110,7 +110,7 @@ export default class HomeView extends Component{
   renderServicios = () => {
     let list = [];
     for(let i = 0; i<this.state.listaServicios.length; i++){
-      list.push(<ItemService config={this.state.seleccionarServicio} servicio={this.state.listaServicios[i]}/>)
+      list.push(<ItemService config={{event: this.state.seleccionarServicio, width: 100}} servicio={this.state.listaServicios[i]}/>)
     }
     return list;
   }
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   floatButton: {
-    position: 'fixe',
+    position: 'absolute',
     width: 230,
     height: 45,
     alignSelf: 'center',

@@ -19,7 +19,7 @@ import {db} from './../commons/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
-export default class ImagesCarrusel extends Component {
+export default class Galery extends Component {
 
   constructor(props){
     super(props);
@@ -61,10 +61,8 @@ export default class ImagesCarrusel extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.carrusel}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={[styles.carrusel,styles.galeria]}>
             {this.renderGalery()}
-          </ScrollView>
         </View>
         /*Inicio de modal para filtros de servicios*/
         <Modal
@@ -92,6 +90,11 @@ export default class ImagesCarrusel extends Component {
 }
 
 const styles = StyleSheet.create({
+  galeria: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingLeft: 5
+  },
   closeContent: {
     flexDirection: 'row',
     paddingLeft: 20,
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
   container:{
     backgroundColor: '#FFF',
     marginTop: 10,
-    paddingLeft: 10
+    paddingLeft: 5
   },
   carrusel: {
     flexDirection: 'row',

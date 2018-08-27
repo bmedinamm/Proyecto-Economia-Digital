@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { List, ListItem } from 'react-native-elements';
-import ImagesCarrusel from './../components/ImagesCarrusel';
+import Galery from './../components/Galery';
 import {
   StyleSheet,
   Text,
@@ -104,7 +104,7 @@ export default class MiPerfilView extends Component{
                 <Icon style={styles.editIcon} name="md-create"/>
               </TouchableOpacity>
             </View>
-            <ImagesCarrusel/>
+            <Galery/>
           </View>
         </View>
       </ScrollView>

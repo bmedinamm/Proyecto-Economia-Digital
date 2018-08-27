@@ -35,14 +35,6 @@ export default class ItemImageCarrusel extends Component {
 }
 
 const styles = StyleSheet.create({
-  layout: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    backgroundColor: 'rgba(1,1,1,0.5)',
-    alignItems: 'center',
-    paddingTop: 15
-  },
   banner: {
     width: '100%',
     height: '100%',
@@ -53,7 +45,6 @@ const styles = StyleSheet.create({
   container:{
     alignItems: 'center',
     height: 90,
-    marginRight: 10,
   },
   universidad: {
     fontSize: 10,
@@ -68,8 +59,10 @@ const styles = StyleSheet.create({
     width: 40,
   },
   containerRoot:{
-    width: 135,
-    height: 130,
-    paddingTop: 10,
+    width: 130,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5
   }
 });

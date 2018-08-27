@@ -15,7 +15,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class ItemService extends Component {
+export default class ItemListService extends Component {
 
   constructor(props){
     super(props);
@@ -25,9 +25,9 @@ export default class ItemService extends Component {
     return (
       <TouchableOpacity 
         onPress={() => {
-          this.props.config.event(this.props.servicio.codigo)
+          
         }}>
-        <View style={[styles.containerRoot, {width: this.props.config.width}]}>
+        <View style={styles.containerRoot}>
           {this.props.servicio.seleccionado ? <Icon style={styles.icon1} name="ios-checkmark-circle" />: <Icon style={styles.icon1} name="ios-checkmark-circle-outline" />}
           <Text style={styles.text}>{this.props.servicio.nombre}</Text>
         </View>
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   containerRoot: {
     height: 110,
+    width: 150,
     borderColor: '#7f8c8d', 
     borderWidth: 0.5,
     alignItems: 'center',
