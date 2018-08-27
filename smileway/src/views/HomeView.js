@@ -33,6 +33,8 @@ export default class HomeView extends Component{
   constructor(){
     super();
     this.state = {
+      codigoUsuario: 'cy8SLXYa5FysXY5OBqf9',
+      usuarioLogueado: {},
       listaOdontologos: [],
       listaUniversidades: [],
       listaServicios: [],
@@ -59,6 +61,18 @@ export default class HomeView extends Component{
 
   componentWillMount = () =>{
     let that = this;
+    //Brayan: Obtenemos la informacion del usuario logueado
+    db.collection("odontologos/").where('codigo', '==', this.state.codigoUsuario).get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          that.setState({usuarioLogueado: doc.data()});
+        });
+      })
+      .catch(function(error) {
+          alert('Ha ocurrido un error, intentelo mas tarde')
+      });
+
+    //Brayan: Obtenemos la lista de servicios globales
     db.collection("servicios/").get()
       .then(function(querySnapshot) {
         let servicios = [];
@@ -89,7 +103,10 @@ export default class HomeView extends Component{
       .then(function(querySnapshot) {
         let odontologos = [];
         querySnapshot.forEach(function(doc) {
-          odontologos.push(doc.data());
+          let odontologo = doc.data();
+          if(odontologo.imagen == undefined)
+            odontologo.imagen = 'https://firebasestorage.googleapis.com/v0/b/smile-way.appspot.com/o/201706020052291.jpg?alt=media&token=59d5e77a-aa3f-4c3b-b057-2e2b6dd0cd3d';
+          odontologos.push(odontologo);
         });
         that.setState({listaOdontologos: odontologos});
         that.setState({mostrarSpinner: false});

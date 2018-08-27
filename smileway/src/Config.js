@@ -91,7 +91,7 @@ class Config extends Component {
                         <Icon
                             size={30}
                             color={focused ? '#1a84ab' : '#434A54'}
-                            name={'md-heart'}
+                            name={'md-notifications'}
                             text={'My Water'}
                             textStyle={focused ? [styles.label, styles.activeLabel] : styles.label}
                         />

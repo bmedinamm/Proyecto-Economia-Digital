@@ -5,13 +5,14 @@
  */
 
 import React, { Component } from 'react';
-
+import ItemNotification from './../components/ItemNotification';
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
   TouchableOpacity,
+  FlatList
 } from 'react-native';
 
 export default class InteresesView extends Component{
@@ -23,11 +24,22 @@ export default class InteresesView extends Component{
 
   render() {
     return (
-      <View>
+      <View style={styles.root}>
+        <FlatList
+          data={[
+            {},{},{},{}
+          ]}
+          style={{paddingTop: 15}}
+          renderItem={({item}) => <ItemNotification user={item}/>}
+        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#FFF'
+  }
 });
