@@ -14,22 +14,30 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert,
+  ActivityIndicator
 
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { CheckBox } from 'react-native-elements';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
+import { firebaseAuth, db } from '../commons/constants';
+import { INITIAL_STATE } from '../commons/registroConstants';
 
 export default class RegistrarseView extends Component {
 
-
   constructor() {
     super();
-    this.state = {
-      odontologo: true,
-      paciente: false
-    }
+
+    this.state = INITIAL_STATE;
+
+    console.ignoredYellowBox = ['Setting a timer'];
+
+    this.inputHandle = this.inputHandle.bind(this);
+    this.registrarUsuario = this.registrarUsuario.bind(this);
+    this.resetViewState = this.resetViewState.bind(this);
+
   }
 
   validarRegistro = () => {
@@ -50,9 +58,217 @@ export default class RegistrarseView extends Component {
     })
   }
 
+  inputHandle = (text, type) => {
+    const nombreRequerido = /^$|\d|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g;
+    const nombreNoRequerido = /\d|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g;
+    const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const password = /^(?=.*\d).{6,25}$/g;
+    const phone = /^[+]*[(]{0,1}[0-9]{1,5}[)]{0,1}[-\s\./0-9]*$/g;
+
+    switch (type) {
+
+      case 'primerNombre': {
+        let valido = !nombreRequerido.test(text);
+        this.setState({
+          primerNombreTouched: true,
+          primerNombreValido: valido,
+          primerNombre: text,
+        })
+        return;
+      }
+
+      case 'segundoNombre': {
+        let valido = !nombreNoRequerido.test(text);
+        this.setState({
+          segundoNombreTouched: true,
+          segundoNombreValido: valido,
+          segundoNombre: text,
+        })
+        return;
+      }
+
+      case 'primerApellido': {
+        let valido = !nombreRequerido.test(text);
+        this.setState({
+          primerApellidoTouched: true,
+          primerApellidoValido: valido,
+          primerApellido: text
+        })
+        return;
+      }
+
+      case 'segundoApellido': {
+        let valido = !nombreNoRequerido.test(text);
+        this.setState({
+          segundoApellidoTouched: true,
+          segundoApellidoValido: valido,
+          segundoApellido: text,
+        })
+        return;
+      }
+
+      case 'email': {
+        let valido = email.test(text);
+        this.setState({
+          emailTouched: true,
+          emailValid: valido,
+          email: text
+        })
+        return;
+      }
+
+      case 'password': {
+        let valido = password.test(text);
+        this.setState({
+          passwordTouched: true,
+          passwordValid: valido,
+          password: text
+        })
+        return;
+      }
+
+      case 'confirm': {
+        let valido = text === this.state.password;
+        this.setState({
+          confirmTouched: true,
+          confirmValid: valido,
+        })
+        return;
+      }
+
+      case 'phone': {
+        let valido = text.length >= 8 ? true : false;
+        valido = valido && phone.test(text);
+        this.setState({
+          phoneTouched: true,
+          phoneValid: valido,
+          phone: text,
+        })
+        return;
+      }
+
+      default: {
+        return;
+      }
+    }
+  }
+
+  registrarUsuario() {
+
+    this.setState({ isLoading: true })
+
+    let displayName = this.state.primerNombre + ' ' + this.state.primerApellido;
+    let signUpPromise = firebaseAuth.createUserWithEmailAndPassword(this.state.email, this.state.password).catch((error) => {
+      this.setState({ isLoading: false })
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      if (errorCode == 'auth/weak-password') {
+        Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
+      }
+      else if (errorCode == 'auth/invalid-email') {
+        Alert.alert('Error', 'El email ingresado es invalido.');
+      }
+      else if (errorCode == 'auth/email-already-in-use') {
+        Alert.alert('Error', 'El email ingresado ya está en uso.');
+      }
+      else {
+        Alert.alert('Error', errorMessage);
+      }
+    })
+
+    signUpPromise.then(() => {
+      firebaseAuth.currentUser.updateProfile({
+        displayName: displayName
+      }).then(() => {
+
+        let name = this.state.primerNombre + ' ' + this.state.segundoNombre + ' ' + this.state.primerApellido + ' ' + this.state.segundoApellido;
+        let nombre = name.replace(/\s\s+/g, ' ');
+        let userInfo = {
+          correo: this.state.email,
+          nombre: nombre,
+          nombreCorto: this.state.primerNombre + ' ' + this.state.primerApellido,
+          telefono: this.state.phone,
+          codigo: ''
+        }
+
+        if (this.state.odontologo) {
+          const ref = db.collection('odontologos/').doc();
+          userInfo.codigo = ref.id;
+          ref.set(userInfo)
+            .then((docRef) => {
+              this.resetViewState();
+              Alert.alert('Éxito', '¡Te has registrado exitosamente!', [
+                { text: 'OK', onPress: () => Actions.homeView() }
+              ]);
+            })
+            .catch((error) => {
+              this.setState({ isLoading: false })
+              console.log(error);
+            });
+        }
+        else {
+          const ref = db.collection('pacientes/').doc();
+          userInfo.codigo = ref.id;
+          ref.set(userInfo)
+            .then((docRef) => {
+              this.resetViewState();
+              Alert.alert('Éxito', '¡Te has registrado exitosamente!', [
+                { text: 'OK', onPress: () => Actions.homeView() }
+              ]);
+            })
+            .catch((error) => {
+              this.setState({ isLoading: false })
+              console.log(error);
+            });
+        }
+
+        firebaseAuth.currentUser.sendEmailVerification().then(() => {
+        }).catch((error) => {
+          this.setState({
+            isLoading: false
+          })
+          Alert.alert('Error', 'Ocurrió un error al enviar email de confirmación.');
+        });
+      })
+        .catch((error) => {
+          this.setState({
+            isLoading: false
+          })
+          Alert.alert('Error', 'Ocurrió un error al actualizar la información del usuario.');
+        })
+    });
+
+  }
+
+  resetViewState() {
+    this.primerNombreTxt.clear();
+    this.segundoNombreTxt.clear();
+    this.primerApellidoTxt.clear();
+    this.segundoApellidoTxt.clear();
+    this.passwordTxt.clear();
+    this.confirmPasswordTxt.clear();
+    this.correoTxt.clear();
+    this.phoneTxt.clear();
+    this.setState(INITIAL_STATE);
+  }
+
   render() {
+
+    let validFields = this.state.primerNombreValido
+      && this.state.segundoNombreValido
+      && this.state.primerApellidoValido
+      && this.state.segundoApellidoValido
+      && this.state.emailValid
+      && this.state.passwordValid
+      && this.state.confirmValid
+      && this.state.phoneValid;
+
+    const displayActivityLoader = <View style={styles.loading}>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>
+
     return (
-      <Swiper showsButtons={true} loop={false}>
+      <Swiper showsButtons={true} loop={false} scrollEnabled={!this.state.isLoading}>
         <View style={styles.slide1}>
           <View style={styles.slide1Content}>
             <View style={styles.titleView}>
@@ -89,72 +305,98 @@ export default class RegistrarseView extends Component {
         <KeyboardAvoidingView style={styles.mainView} behavior="padding">
           <View style={styles.registroForm}>
             <View style={styles.labelAndInput}>
-              <Text style={styles.label}>Primer Nombre</Text>
-              <TextInput style={styles.textoInput}
+              <Text style={styles.label}>Primer Nombre * </Text>
+              <TextInput style={[styles.textoInput,
+              this.state.primerNombreTouched && !this.state.primerNombreValido ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='Primer Nombre'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'primerNombre')}
+                ref={input => { this.primerNombreTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Segundo Nombre</Text>
-              <TextInput style={styles.textoInput}
+              <TextInput style={[styles.textoInput,
+              this.state.segundoNombreTouched && !this.state.segundoNombreValido ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='Segundo Nombre'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'segundoNombre')}
+                ref={input => { this.segundoNombreTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
-              <Text style={styles.label}>Primer Apellido</Text>
-              <TextInput style={styles.textoInput}
+              <Text style={styles.label}>Primer Apellido * </Text>
+              <TextInput style={[styles.textoInput,
+              this.state.primerApellidoTouched && !this.state.primerApellidoValido ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='Primer Apellido'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'primerApellido')}
+                ref={input => { this.primerApellidoTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Segundo Apellido</Text>
-              <TextInput style={styles.textoInput}
+              <TextInput style={[styles.textoInput,
+              this.state.segundoApellidoTouched && !this.state.segundoApellidoValido ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='Segundo Apellido'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'segundoApellido')}
+                ref={input => { this.segundoApellidoTxt = input }} />
             </View>
           </View>
         </KeyboardAvoidingView>
-        <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+        <KeyboardAvoidingView style={styles.mainView} behavior="padding" pointerEvents={this.state.isLoading ? 'none' : 'auto'} >
           <View style={styles.registroForm}>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Correo</Text>
-              <TextInput style={styles.textoInput}
+              <TextInput style={[styles.textoInput,
+              this.state.emailTouched && !this.state.emailValid ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='correo@unah.hn'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'email')}
+                ref={input => { this.correoTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Contraseña</Text>
-              <TextInput style={styles.textoInput}
-                secureTextEntry={true} 
+              <TextInput style={[styles.textoInput,
+              this.state.passwordTouched && !this.state.passwordValid ? styles.invalidInput : styles.validInput]}
+                secureTextEntry={true}
                 underlineColorAndroid='transparent'
                 placeholder='Mínimo 6 caracteres y 1 número'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'password')}
+                ref={input => { this.passwordTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Confirmar Contraseña</Text>
-              <TextInput style={styles.textoInput}
-                secureTextEntry={true} 
+              <TextInput style={[styles.textoInput,
+              this.state.confirmTouched && !this.state.confirmValid ? styles.invalidInput : styles.validInput]}
+                secureTextEntry={true}
                 underlineColorAndroid='transparent'
                 placeholder='Confirmar contraseña'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'confirm')}
+                ref={input => { this.confirmPasswordTxt = input }} />
             </View>
             <View style={styles.labelAndInput}>
               <Text style={styles.label}>Teléfono</Text>
-              <TextInput style={styles.textoInput}
+              <TextInput style={[styles.textoInput,
+              this.state.phoneTouched && !this.state.phoneValid ? styles.invalidInput : styles.validInput]}
                 underlineColorAndroid='transparent'
                 placeholder='+504 9999-9999'
-                placeholderTextColor='gray' />
+                placeholderTextColor='gray'
+                onChangeText={(text) => this.inputHandle(text, 'phone')}
+                ref={input => { this.phoneTxt = input }} />
             </View>
-            <TouchableOpacity style={styles.logInButton}
-              onPress={()=>this.validarRegistro()}>
-                <Text style={styles.logIntext}>Registrarme</Text>
+            <TouchableOpacity style={[styles.logInButton, validFields ? styles.validButton : styles.invalidButton]}
+              disabled={!validFields}
+              onPress={() => this.registrarUsuario()}>
+              <Text style={styles.logIntext}>Registrarme</Text>
             </TouchableOpacity>
-          </View>  
+          </View>
+          {this.state.isLoading ? displayActivityLoader : <View />}
         </KeyboardAvoidingView>
       </Swiper>
     );
@@ -172,7 +414,7 @@ const styles = StyleSheet.create({
     width: '90%',
     height: '85%',
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   title: {
     color: '#00577c',
@@ -241,4 +483,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#FFF'
   },
+  invalidInput: {
+    borderColor: 'red'
+  },
+  validInput: {
+  },
+  invalidButton: {
+    opacity: 0.3,
+  },
+  validButton: {
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF88'
+  }
 });
