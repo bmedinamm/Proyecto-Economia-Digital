@@ -10,6 +10,7 @@ import { List, ListItem } from 'react-native-elements';
 import Galery from './../components/Galery';
 import { Container, Header, Tab, Tabs, TabHeading } from 'native-base';
 import ItemService from './../components/ItemService';
+import Button from 'apsl-react-native-button'
 
 import {
   StyleSheet,
@@ -21,7 +22,7 @@ import {
   AppRegistry, 
   FlatList,
   Modal,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
 export default class OtroPerfilView extends Component{
@@ -78,6 +79,9 @@ export default class OtroPerfilView extends Component{
                   <Text style={{marginLeft: 5}}>{this.props.universidad.nombre}</Text>
                 </View>
                 <Text>Periodo {this.props.universidad.anioInicial} - 2018</Text>
+                <Button style={{width: '35%', height: 30, alignSelf: 'center', marginTop: 10}} textStyle={{fontSize: 16}}>
+                  Reservar cita
+                </Button>
               </View>
             </View>
             <View style={[styles.headerContainer]}>
@@ -258,7 +262,7 @@ const styles = StyleSheet.create({
   },
   information: {
     padding: 10,
-    height: 230,
+    height: 250,
   },
   informationContainer: {
     flex: 4.5,

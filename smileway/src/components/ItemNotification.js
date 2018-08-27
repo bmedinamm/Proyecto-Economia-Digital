@@ -25,11 +25,11 @@ export default class ItemNotification extends Component {
     return (
       <View style={styles.root}>
         <View style={styles.col1}>
-          <Image style={styles.imagen} source={{uri: 'https://firebasestorage.googleapis.com/v0/b/smile-way.appspot.com/o/201706020052291.jpg?alt=media&token=59d5e77a-aa3f-4c3b-b057-2e2b6dd0cd3d'}}/>
+          <Image style={styles.imagen} source={{uri: this.props.notificacion.imagen}}/>
         </View>
         <View style={styles.col2}>
-          <Text style={styles.nombre}>Brayan Josue Medina</Text>
-          <Text style={styles.descripcion}>Ha visitado tu perfil y está interesado en reservar una cita el <Text style={{fontWeight: '600'}}>22/10/2018</Text>. <Text style={styles.fecha}>Hace 1 minuto</Text></Text>
+          <Text style={styles.nombre}>{this.props.notificacion.nombre}</Text>
+          <Text style={styles.descripcion}>{this.props.notificacion.descripcion} <Text style={{fontWeight: '600'}}>{this.props.notificacion.fechaReservacion}</Text>. <Text style={styles.fecha}>Hace 1 minuto</Text></Text>
         </View>
       </View>
     );

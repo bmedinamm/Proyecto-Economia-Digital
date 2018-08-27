@@ -40,4 +40,8 @@ obtenerUsuarioLogueado = () => {
 	return usuarioLogueado;
 }
 
-export {obtenerInformacionUsairo, obtenerUsuarioLogueado};
+obtenerCodigoUsuarioLogueado = () => {
+	return usuarioLogueado.codigo;
+}
+
+export {obtenerInformacionUsairo, obtenerUsuarioLogueado, obtenerCodigoUsuarioLogueado};
