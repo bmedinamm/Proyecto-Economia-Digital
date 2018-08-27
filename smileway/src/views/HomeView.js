@@ -13,7 +13,8 @@ import ItemUserList from './../components/ItemUserList';
 import TipsCarrusel from './../components/TipsCarrusel';
 import Button from 'apsl-react-native-button';
 import {db} from './../commons/constants';
-
+import UniversitiesList from './../components/UniversitiesList';
+import ItemService from './../components/ItemService';
 import {
   StyleSheet,
   Text,
@@ -23,9 +24,8 @@ import {
   FlatList,
   RefreshControl,
   TouchableHighlight,
-  Modal
+  Modal,
 } from 'react-native';
-
 
 export default class HomeView extends Component{
 
@@ -33,31 +33,104 @@ export default class HomeView extends Component{
   constructor(){
     super();
     this.state = {
+      codigoUsuario: 'cy8SLXYa5FysXY5OBqf9',
+      usuarioLogueado: {},
       listaOdontologos: [],
-      refreshing: false,
-      modalVisible: false
+      listaUniversidades: [],
+      listaServicios: [],
+      mostrarSpinner: true,
+      mostrarFiltroUniversidades: false,
+      mostrarFiltroServicios: false,
+      filtrarRegistros: (codigoUniversidad, codigoServicio) => {
+        this.setState({mostrarFiltroUniversidades: false, mostrarFiltroServicios: false})
+        this._onRefresh(codigoUniversidad, codigoServicio);
+      },
+      seleccionarServicio: (codigo) =>{
+        let servicios = this.state.listaServicios;
+        for(let i = 0; i<servicios.length; i++){
+          if(servicios[i].codigo == codigo){
+            servicios[i].seleccionado = !servicios[i].seleccionado;
+            break;
+          }
+        }
+        this.setState({listaServicios: servicios})
+      }
     }
-    this._onRefresh();
+    this._onRefresh(undefined, undefined);
+  }
+
+  componentWillMount = () =>{
+    let that = this;
+    //Brayan: Obtenemos la informacion del usuario logueado
+    db.collection("odontologos/").where('codigo', '==', this.state.codigoUsuario).get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          that.setState({usuarioLogueado: doc.data()});
+        });
+      })
+      .catch(function(error) {
+          alert('Ha ocurrido un error, intentelo mas tarde')
+      });
+
+    //Brayan: Obtenemos la lista de servicios globales
+    db.collection("servicios/").get()
+      .then(function(querySnapshot) {
+        let servicios = [];
+        querySnapshot.forEach(function(doc) {
+          servicios.push({seleccionado: false, ...doc.data()});
+        });
+        that.setState({listaServicios: servicios});
+      })
+      .catch(function(error) {
+          alert('Ha ocurrido un error, intentelo mas tarde')
+      });
   }
 
   //Brayan: Funcion que se ejecuta al hacer scroll hacia abajo
-  _onRefresh = () => {
-    this.setState({refreshing: true});
+  _onRefresh = (codigoUniversidad, codigoServicio) => {
+    this.setState({mostrarSpinner: true});
     let that = this;
-    //Obtenemos la lista de notas creadas por el usuario
-    db.collection("odontologos/").get()
+    let referencia;
+    
+    //Se aplica cuando solo se quiere filtrar por universidad
+    if(codigoUniversidad != undefined && codigoServicio == undefined)
+      referencia =  db.collection("odontologos/").where('universidad.codigo', '==', codigoUniversidad)
+    else
+      referencia = db.collection("odontologos/");
+
+    //Aplicamos la referencia indicada
+    referencia.get()
       .then(function(querySnapshot) {
         let odontologos = [];
         querySnapshot.forEach(function(doc) {
-          odontologos.push(doc.data());
+          let odontologo = doc.data();
+          if(odontologo.imagen == undefined)
+            odontologo.imagen = 'https://firebasestorage.googleapis.com/v0/b/smile-way.appspot.com/o/201706020052291.jpg?alt=media&token=59d5e77a-aa3f-4c3b-b057-2e2b6dd0cd3d';
+          odontologos.push(odontologo);
         });
         that.setState({listaOdontologos: odontologos});
-        that.setState({refreshing: false});
+        that.setState({mostrarSpinner: false});
       })
       .catch(function(error) {
           alert('Ha ocurrido un error, intentelo mas tarde')
       });
   };
+
+  renderUniversidades = () => {
+    let list = [];
+    for(let i = 0; i<this.state.listaTips.length; i++){
+      list.push(<ItemTipCarrusel tips={this.state.listaTips[i]}/>)
+    }
+    return list;
+  }
+
+  renderServicios = () => {
+    let list = [];
+    for(let i = 0; i<this.state.listaServicios.length; i++){
+      list.push(<ItemService config={{event: this.state.seleccionarServicio, width: 100}} servicio={this.state.listaServicios[i]}/>)
+    }
+    return list;
+  }
 
   render() {
     return (
@@ -65,7 +138,7 @@ export default class HomeView extends Component{
         <ScrollView
           refreshControl={
             <RefreshControl
-              refreshing={this.state.refreshing}
+              refreshing={this.state.mostrarSpinner}
               onRefresh={this._onRefresh}
             />
           }
@@ -82,25 +155,118 @@ export default class HomeView extends Component{
         </ScrollView>
         <View style={styles.floatButton}>
             <View style={styles.float1}>
-              <TouchableOpacity style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{this.setState({mostrarFiltroUniversidades: true})}} style={{flexDirection: 'row'}}>
                 <Icon style={styles.icon1} name="md-school"/>
                 <Text style={styles.txt1}>Universidad</Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.txt3}>|</Text>
             <View style={styles.float2}>
-              <TouchableOpacity style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{this.setState({mostrarFiltroServicios: true})}}  style={{flexDirection: 'row'}}>
                 <Icon style={styles.icon2} name="md-options"/>
                 <Text style={styles.txt2}>Servicio</Text>
               </TouchableOpacity>
             </View>
         </View>
+
+        /*Inicio de modal para filtros de universidad*/
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.mostrarFiltroUniversidades}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{flex: 1}}>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({mostrarFiltroUniversidades: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
+              <UniversitiesList config={{filtrarRegistros: this.state.filtrarRegistros}}/>
+          </View>
+        </Modal>
+        /*Fin de modal para filtros de universidad*/
+
+        /*Inicio de modal para filtros de servicios*/
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.mostrarFiltroServicios}>
+          <View style={{flex: 1}}>
+              <ScrollView contentContainerStyle={{paddingTop: 80}}>
+                <Text style={styles.cardTitle}>Filtra por servicio (tratamiento)</Text>
+                <Text style={styles.cardContent}>Le recomendamos reservar una cita en caso que desconozca el tipo de tratamiento que usted requiere</Text>
+                <View style={styles.gridServices}>
+                  {this.renderServicios()}
+                </View>
+              </ScrollView>
+              <View style={styles.closeContent}>
+                <TouchableOpacity onPress={() => {this.setState({mostrarFiltroServicios: false})}}>
+                  <Icon style={styles.closeIcon} name="md-close"/>
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.floatButton, {alignItems: 'center',justifyContent: 'center', bottom: 30, backgroundColor: '#3BAFDA'}]}>
+                  <TouchableOpacity onPress={() => {this.state.filtrarRegistros(undefined, undefined)}} style={{flexDirection: 'row'}}>
+                    <Icon style={[styles.icon1, {color: '#FFF'}]} name="md-options" />
+                    <Text style={styles.txt4}>Aplicar filtro</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
+        /*Fin de modal para filtros de servicios*/
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  cardTitle: {
+    textAlign: 'left',
+    color: '#606060',
+    fontSize: 20,
+    marginLeft: 25,
+    fontWeight: '600'
+  },
+  cardContent: {
+    color: '#909090',
+    marginTop: 5,
+    marginLeft: 25
+  },
+  card: {
+    height: 100,
+    justifyContent: 'center',
+    marginTop: 80,
+    margin: 15,
+    padding: 20,
+    borderRadius: 5,
+    borderColor: '#7f8c8d', 
+    borderWidth: 0.5,
+  },
+  gridServices: {
+    flex: 1, 
+    padding: 15,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around'
+  },
+  txt4: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: '#FFF'
+  },
+  closeContent: {
+    flexDirection: 'row',
+    paddingLeft: 20,
+    paddingTop: 30,
+    position: 'absolute',
+    backgroundColor: '#FFF',
+    width: '100%'
+  },
+  closeIcon: {
+    color: '#000',
+    fontSize: 30
+  },
   txt3: {
     fontSize: 22,
     marginLeft: 10,
@@ -139,7 +305,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   floatButton: {
-    position: 'fixe',
+    position: 'absolute',
     width: 230,
     height: 45,
     alignSelf: 'center',
