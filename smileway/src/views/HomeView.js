@@ -12,9 +12,10 @@ import store from './../redux/store';
 import ItemUserList from './../components/ItemUserList';
 import TipsCarrusel from './../components/TipsCarrusel';
 import Button from 'apsl-react-native-button';
-import {db} from './../commons/constants';
+import {db, firebaseAuth} from './../commons/constants';
 import UniversitiesList from './../components/UniversitiesList';
 import ItemService from './../components/ItemService';
+import {obtenerInformacionUsairo} from './../commons/user';
 import {
   StyleSheet,
   Text,
@@ -61,16 +62,13 @@ export default class HomeView extends Component{
 
   componentWillMount = () =>{
     let that = this;
-    //Brayan: Obtenemos la informacion del usuario logueado
-    db.collection("odontologos/").where('codigo', '==', this.state.codigoUsuario).get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          that.setState({usuarioLogueado: doc.data()});
-        });
-      })
-      .catch(function(error) {
-          alert('Ha ocurrido un error, intentelo mas tarde')
-      });
+    //Obtenemos el ID del usuario logueado
+    firebaseAuth.onAuthStateChanged(user => {
+      //alert(JSON.stringify(user));
+      that.setState({codigoUsuario: user.uid});
+      //Brayan: Obtenemos la informacion del usuario logueado
+      obtenerInformacionUsairo(user.uid);
+    })
 
     //Brayan: Obtenemos la lista de servicios globales
     db.collection("servicios/").get()

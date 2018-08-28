@@ -2,7 +2,7 @@ import {db} from './constants';
 
 //Brayan: Obtenemos la iformacion del usuario logueado
 var usuarioLogueado = {
-	nombre: 'Arely Nohemy Mendez',
+	/*nombre: 'Arely Nohemy Mendez',
 	nombreCorto: 'Arely Melendez',
 	telefono: '+504 3245-9483',
 	universidad: {
@@ -20,15 +20,17 @@ var usuarioLogueado = {
 			costo: 'Tratamiento gratuito',
 			nombre: 'Blanqueamientos'
 		}
-	]
+	]*/
 }
 
 //Brayan: Importamos los iconos de los items del menu
-obtenerInformacionUsairo = (userID) => {
-    db.collection("odontologos/").where('codigo', '==', userID).get()
+obtenerInformacionUsairo = (userId) => {
+	//alert(userId)
+    db.collection("odontologos/").where('codigo', '==', userId).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-         	usuarioLogueado = doc.data()
+         	usuarioLogueado = doc.data();
+         	//alert(JSON.stringify(usuarioLogueado));
         });
       })
       .catch(function(error) {

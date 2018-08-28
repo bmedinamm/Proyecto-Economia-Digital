@@ -46,6 +46,39 @@ class Config extends Component {
     return (
       <Router>
           <Stack key="root">
+            <Scene
+              title='Swiper Inicial'
+              key='swiperInicialView'
+              hideNavBar={true}
+              component={SwiperInicialView}>
+            </Scene>
+            <Scene
+              title='Inicio de Sesion'
+              key='inicioSesionView'
+              hideNavBar={true}
+              component={InicioSesionView}>
+            </Scene>
+            <Scene
+              title='Registro'
+              key='registrarseView'
+              hideNavBar={true}
+              component={RegistrarseView}>
+            </Scene>
+            <Scene title="Notificaciones" key="notificaciones" component={NotificacionesView}/>
+            <Scene title="Mensajes" key="mensajes" component={MensajesView}/>
+            <Scene 
+              title="Explorar" 
+              key="odontologos" 
+              component={OdontologosView}
+              hideNavBar={false}
+              renderRightButton={() => (
+                <View style={styles.navBarIcons}>
+                  <TouchableOpacity onPress={this.props.prueba}>
+                    <Icon style={styles.searchIcon} name="ios-search"/>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
             <Tabs showLabel={false} tabBarPosition='bottom' wrap={true}>
                 <Scene
                     title="Smileway"
@@ -111,39 +144,6 @@ class Config extends Component {
                     )}
                 />
             </Tabs>
-            <Scene
-              title='Swiper Inicial'
-              key='swiperInicialView'
-              hideNavBar={true}
-              component={SwiperInicialView}>
-            </Scene>
-            <Scene
-              title='Inicio de Sesion'
-              key='inicioSesionView'
-              hideNavBar={true}
-              component={InicioSesionView}>
-            </Scene>
-            <Scene
-              title='Registro'
-              key='registrarseView'
-              hideNavBar={true}
-              component={RegistrarseView}>
-            </Scene>
-            <Scene title="Notificaciones" key="notificaciones" component={NotificacionesView}/>
-            <Scene title="Mensajes" key="mensajes" component={MensajesView}/>
-            <Scene 
-              title="Explorar" 
-              key="odontologos" 
-              component={OdontologosView}
-              hideNavBar={false}
-              renderRightButton={() => (
-                <View style={styles.navBarIcons}>
-                  <TouchableOpacity onPress={this.props.prueba}>
-                    <Icon style={styles.searchIcon} name="ios-search"/>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
             <Scene title="Perfil" key="otroPerfil" component={OtroPerfilView}/>
           </Stack>
         </Router>

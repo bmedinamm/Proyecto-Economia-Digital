@@ -158,29 +158,12 @@ export default class RegistrarseView extends Component {
     this.setState({ isLoading: true })
 
     let displayName = this.state.primerNombre + ' ' + this.state.primerApellido;
-    let signUpPromise = firebaseAuth.createUserWithEmailAndPassword(this.state.email, this.state.password).catch((error) => {
-      this.setState({ isLoading: false })
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      if (errorCode == 'auth/weak-password') {
-        Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
-      }
-      else if (errorCode == 'auth/invalid-email') {
-        Alert.alert('Error', 'El email ingresado es invalido.');
-      }
-      else if (errorCode == 'auth/email-already-in-use') {
-        Alert.alert('Error', 'El email ingresado ya está en uso.');
-      }
-      else {
-        Alert.alert('Error', errorMessage);
-      }
-    })
-
-    signUpPromise.then(() => {
+    let signUpPromise = firebaseAuth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+    .then((resp) => {
+      //alert(JSON.stringify(resp));
       firebaseAuth.currentUser.updateProfile({
         displayName: displayName
       }).then(() => {
-
         let name = this.state.primerNombre + ' ' + this.state.segundoNombre + ' ' + this.state.primerApellido + ' ' + this.state.segundoApellido;
         let nombre = name.replace(/\s\s+/g, ' ');
         let userInfo = {
@@ -188,18 +171,20 @@ export default class RegistrarseView extends Component {
           nombre: nombre,
           nombreCorto: this.state.primerNombre + ' ' + this.state.primerApellido,
           telefono: this.state.phone,
-          codigo: ''
+          codigo: resp.user.uid,
+          universidad: {}
         }
 
         if (this.state.odontologo) {
           const ref = db.collection('odontologos/').doc();
-          userInfo.codigo = ref.id;
+          //userInfo.codigo = ref.id;
           ref.set(userInfo)
             .then((docRef) => {
               this.resetViewState();
-              Alert.alert('Éxito', '¡Te has registrado exitosamente!', [
+              /*Alert.alert('Éxito', '¡Te has registrado exitosamente!', [
                 { text: 'OK', onPress: () => Actions.homeView() }
-              ]);
+              ]);*/
+              Actions.homeView();
             })
             .catch((error) => {
               this.setState({ isLoading: false })
@@ -208,7 +193,7 @@ export default class RegistrarseView extends Component {
         }
         else {
           const ref = db.collection('pacientes/').doc();
-          userInfo.codigo = ref.id;
+          //userInfo.codigo = ref.id;
           ref.set(userInfo)
             .then((docRef) => {
               this.resetViewState();
@@ -230,12 +215,34 @@ export default class RegistrarseView extends Component {
           Alert.alert('Error', 'Ocurrió un error al enviar email de confirmación.');
         });
       })
-        .catch((error) => {
-          this.setState({
-            isLoading: false
-          })
-          Alert.alert('Error', 'Ocurrió un error al actualizar la información del usuario.');
+      .catch((error) => {
+        this.setState({
+          isLoading: false
         })
+        Alert.alert('Error', 'Ocurrió un error al actualizar la información del usuario.');
+      })
+    })
+    .catch((error) => {
+      this.setState({ isLoading: false })
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      if (errorCode == 'auth/weak-password') {
+        Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
+      }
+      else if (errorCode == 'auth/invalid-email') {
+        Alert.alert('Error', 'El email ingresado es invalido.');
+      }
+      else if (errorCode == 'auth/email-already-in-use') {
+        Alert.alert('Error', 'El email ingresado ya está en uso.');
+      }
+      else {
+        Alert.alert('Error', errorMessage);
+      }
+    })
+
+    signUpPromise.then(() => {
+
+      
     });
 
   }
